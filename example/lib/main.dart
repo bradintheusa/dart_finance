@@ -22,9 +22,9 @@ void main(List<String> arguments) {
             'per': per,
             'pmt': Finance.pmt(rate: 0.1 / 12, nper: 1 * 12, pv: 5000),
             'ppmt':
-                Finance.ppmt(rate: 0.1 / 12, per: per, nper: 1 * 12, pv: 5000),
+                Finance.ppmt(rate: 0.1 / 12, per: per.toDouble(), nper: 1 * 12, pv: 5000),
             'ipmt':
-                Finance.ipmt(rate: 0.1 / 12, per: per, nper: 1 * 12, pv: 5000),
+                Finance.ipmt(rate: 0.1 / 12, per: per.toDouble(), nper: 1 * 12, pv: 5000),
           });
 
   payments.forEach(print);

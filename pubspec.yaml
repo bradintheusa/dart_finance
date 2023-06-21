@@ -1,6 +1,6 @@
 name: finance
 description: The fundamental package for financial computing with Dart.
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/ismaelJimenez/finance
 
 environment:

@@ -42,15 +42,15 @@ class Finance {
   ///     Available:
   ///     http://www.oasis-open.org/committees/documents.php?wg_abbrev=office-formula
   ///     OpenDocument-formula-20090508.odt
-  static num fv(
-      {required num rate,
-      required num nper,
-      required num pmt,
-      required num pv,
+  static double fv(
+      {required double rate,
+      required double nper,
+      required double pmt,
+      required double pv,
       bool end = true}) {
     final int when = end ? 0 : 1;
-    final num temp = pow(1 + rate, nper);
-    final num fact =
+    final double temp = pow(1 + rate, nper).toDouble();
+    final double fact =
         (rate == 0) ? nper : ((1 + rate * when) * (temp - 1) / rate);
     return -(pv * temp + pmt * fact);
   }
@@ -97,16 +97,16 @@ class Finance {
   ///     Available:
   ///     http://www.oasis-open.org/committees/documents.php
   ///     ?wg_abbrev=office-formulaOpenDocument-formula-20090508.odt
-  static num pmt(
-      {required num rate,
-      required num nper,
-      required num pv,
-      num fv = 0,
+  static double pmt(
+      {required double rate,
+      required double nper,
+      required double pv,
+      double fv = 0,
       bool end = true}) {
     final int when = end ? 0 : 1;
-    final num temp = pow(1 + rate, nper);
-    final num maskedRate = (rate == 0) ? 1 : rate;
-    final num fact = (rate == 0)
+    final double temp = pow(1 + rate, nper).toDouble();
+    final double maskedRate = (rate == 0) ? 1 : rate;
+    final double fact = (rate == 0)
         ? nper
         : ((1 + maskedRate * when) * (temp - 1) / maskedRate);
     return -(fv + pv * temp) / fact;
@@ -134,18 +134,18 @@ class Finance {
   ///     fv + pv*(1+rate)**nper + pmt*(1+rate*(end))/rate*((1+rate)**nper-1) = 0
   ///    but if ``rate = 0`` then::
   ///     fv + pv + pmt*nper = 0
-  static num nper(
-      {required num rate,
-      required num pmt,
-      required num pv,
-      num fv = 0,
+  static double nper(
+      {required double rate,
+      required double pmt,
+      required double pv,
+      double fv = 0,
       bool end = true}) {
     final int when = end ? 0 : 1;
 
     try {
-      final num A = -(fv + pv) / pmt;
-      final num z = pmt * (1 + rate * when) / rate;
-      final num B = log((-fv + z) / (pv + z)) / log(1 + rate);
+      final double A = -(fv + pv) / pmt;
+      final double z = pmt * (1 + rate * when) / rate;
+      final double B = log((-fv + z) / (pv + z)) / log(1 + rate);
       return (rate == 0) ? A : B;
     } catch (e) {
       return (-fv + pv) / pmt;
@@ -170,15 +170,15 @@ class Finance {
   /// If specified, the `end` argument specifies when payments are due, at the end or beginning
   /// of each period. (default=true).
   ///
-  static num ipmt(
-      {required num rate,
-      required num per,
-      required num nper,
-      required num pv,
-      num fv = 0,
+  static double ipmt(
+      {required double rate,
+      required double per,
+      required double nper,
+      required double pv,
+      double fv = 0,
       bool end = true}) {
-    final num totalPmt = pmt(rate: rate, nper: nper, pv: pv, fv: fv, end: end);
-    num ipmt =
+    final double totalPmt = pmt(rate: rate, nper: nper, pv: pv, fv: fv, end: end);
+    double ipmt =
         _rbl(rate: rate, per: per, pmt: totalPmt, pv: pv, end: end) * rate;
     ipmt = end ? ipmt : ipmt / (1 + rate);
     ipmt = (!end && (per == 1)) ? 0 : ipmt;
@@ -188,11 +188,11 @@ class Finance {
   //  This function is here to simply have a different name for the 'fv'
   //  function to not interfere with the 'fv' keyword argument within the 'ipmt'
   //  function.  It is the 'remaining balance on loan'.
-  static num _rbl(
-      {required num rate,
-      required num per,
-      required num pmt,
-      required num pv,
+  static double _rbl(
+      {required double rate,
+      required double per,
+      required double pmt,
+      required double pv,
       bool end = true}) {
     return fv(rate: rate, nper: per - 1, pmt: pmt, pv: pv, end: end);
   }
@@ -215,14 +215,14 @@ class Finance {
   /// If specified, the `end` argument specifies when payments are due, at the end or beginning
   /// of each period. (default=true).
   ///
-  static num ppmt(
-      {required num rate,
-      required num per,
-      required num nper,
-      required num pv,
-      num fv = 0,
+  static double ppmt(
+      {required double rate,
+      required double per,
+      required double nper,
+      required double pv,
+      double fv = 0,
       bool end = true}) {
-    final num total = pmt(rate: rate, nper: nper, pv: pv, fv: fv, end: end);
+    final double total = pmt(rate: rate, nper: nper, pv: pv, fv: fv, end: end);
     return total -
         ipmt(rate: rate, per: per, nper: nper, pv: pv, fv: fv, end: end);
   }
@@ -262,15 +262,15 @@ class Finance {
   ///    Available:
   ///    http://www.oasis-open.org/committees/documents.php?wg_abbrev=office-formula
   ///    OpenDocument-formula-20090508.odt
-  static num pv(
-      {required num rate,
-      required num nper,
-      required num pmt,
-      required num fv,
+  static double pv(
+      {required double rate,
+      required double nper,
+      required double pmt,
+      required double fv,
       bool end = true}) {
     final int when = end ? 0 : 1;
-    final num temp = pow(1 + rate, nper);
-    final num fact =
+    final double temp = pow(1 + rate, nper).toDouble();
+    final double fact =
         (rate == 0) ? nper : ((1 + rate * when) * (temp - 1) / rate);
     return -(fv + pmt * fact) / temp;
   }
@@ -279,9 +279,9 @@ class Finance {
   //  (y + (r + 1)^n*x + p*((r + 1)^n - 1)*(r*w + 1)/r)/(n*(r + 1)^(n - 1)*x -
   //  p*((r + 1)^n - 1)*(r*w + 1)/r^2 + n*p*(r + 1)^(n - 1)*(r*w + 1)/r +
   //  p*((r + 1)^n - 1)*w/r)
-  static num _g_div_gp(num r, num n, num p, num x, num y, num w) {
-    final num t1 = pow(r + 1, n);
-    final num t2 = pow(r + 1, n - 1);
+  static double _g_div_gp(double r, double n, double p, double x, double y, double w) {
+    final double t1 = pow(r + 1, n).toDouble();
+    final double t2 = pow(r + 1, n - 1).toDouble();
     return (y + t1 * x + p * (t1 - 1) * (r * w + 1) / r) /
         (n * t2 * x -
             p * (t1 - 1) * (r * w + 1) / pow(r, 2) +
@@ -335,23 +335,23 @@ class Finance {
   ///    (OASIS). Billerica, MA, USA. [ODT Document]. Available:
   ///    http://www.oasis-open.org/committees/documents.php?wg_abbrev=office-formula
   ///    OpenDocument-formula-20090508.odt
-  static num rate(
-      {required num nper,
-      required num pmt,
-      required num pv,
-      required num fv,
+  static double rate(
+      {required double nper,
+      required double pmt,
+      required double pv,
+      required double fv,
       bool end = true,
-      num guess = 0.1,
-      num tol = 1e-6,
-      num maxIter = 100}) {
+      double guess = 0.1,
+      double tol = 1e-6,
+      double maxIter = 100}) {
     final int when = end ? 0 : 1;
 
-    num rn = guess;
-    num iterator = 0;
+    double rn = guess;
+    double iterator = 0;
     bool close = false;
     while ((iterator < maxIter) && !close) {
-      final num rnp1 = rn - _g_div_gp(rn, nper, pmt, pv, fv, when);
-      final num diff = (rnp1 - rn).abs();
+      final double rnp1 = rn - _g_div_gp(rn, nper, pmt, pv, fv, when.toDouble());
+      final double diff = (rnp1 - rn).abs();
       close = diff < tol;
       iterator += 1;
       rn = rnp1;
@@ -380,21 +380,21 @@ class Finance {
   /// ----------
   ///    .. [G] L. J. Gitman, "Principles of Managerial Finance, Brief," 3rd ed.,
   ///       Addison-Wesley, 2003, pg. 346.
-  static num npv({required num rate, required List<num> values}) {
+  static double npv({required double rate, required List<num> values}) {
     return List<int>.generate(values.length, (int index) => index)
         .map((int index) => values[index] / pow(1 + rate, index))
-        .fold(0, (num p, num c) => p + c);
+        .fold(0, (double p, double c) => p + c);
   }
 
-  static num _npvPrime({required num rate, required List<num> values}) {
+  static double _npvPrime({required double rate, required List<num> values}) {
     return List<int>.generate(values.length, (int index) => index)
         .map((int index) => -index * values[index] / pow(1 + rate, index + 1))
-        .fold(0, (num p, num c) => p + c);
+        .fold(0, (double p, double c) => p + c);
   }
 
-  static num _npv_div_npvPrime(num rate, List<num> values) {
-    final num t1 = npv(rate: rate, values: values);
-    final num t2 = _npvPrime(rate: rate, values: values);
+  static double _npv_div_npvPrime(double rate, List<num> values) {
+    final double t1 = npv(rate: rate, values: values);
+    final double t2 = _npvPrime(rate: rate, values: values);
     return t1 / t2;
   }
 
@@ -426,17 +426,17 @@ class Finance {
   ///    g(r) is the formula
   ///    g'(r) is the derivative with respect to r.
 
-  static num irr(
+  static double irr(
       {required List<num> values,
-      num guess = 0.1,
-      num tol = 1e-6,
-      num maxIter = 100}) {
-    num rn = guess;
-    num iterator = 0;
+      double guess = 0.1,
+      double tol = 1e-6,
+      double maxIter = 100}) {
+    double rn = guess;
+    double iterator = 0;
     bool close = false;
     while ((iterator < maxIter) && !close) {
-      final num rnp1 = rn - _npv_div_npvPrime(rn, values);
-      final num diff = (rnp1 - rn).abs();
+      final double rnp1 = rn - _npv_div_npvPrime(rn, values);
+      final double diff = (rnp1 - rn).abs();
       close = diff < tol;
       iterator += 1;
       rn = rnp1;
