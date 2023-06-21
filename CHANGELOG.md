@@ -1,6 +1,10 @@
+## [0.1.2] - 6/21/23
+
+*  Forked - refactored, upgraded.
+
 ## [0.1.0] - 3/9/19
 
-*  Added nper, ppmt, ipmt, pv, rate, npv and irr. Stibilize interfaces
+*  Added nper, ppmt, ipmt, pv, rate, npv and irr. Stabilize interfaces
 
 ## [0.0.5] - 2/9/19
 
