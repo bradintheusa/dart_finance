@@ -5,7 +5,6 @@
 library finance;
 
 import 'dart:math';
-import 'package:meta/meta.dart';
 
 class Finance {
   /// Returns the value at the end of the `nper` periods.
